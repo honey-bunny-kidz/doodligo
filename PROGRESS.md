@@ -19,4 +19,6 @@ Prompts for Muse: `PYTHONPATH=episodes python3 engine/prep.py episodes/<ep>.py c
 | 09 | dl009_weather | – | – | – | – |
 | 10 | dl010_ocean | – | – | – | – |
 
+Thumbnails: `engine/thumb2.py` (child-friendly design). Sonap cannot attach thumbnails, so set them in YouTube Studio after each video publishes (Details → Thumbnail → ⋮ → Upload file → Save).
+
 Muse weekly usage limit reached on 2026-11-23; resets Monday 2026-11-30 11:03 (Asia/Colombo).
