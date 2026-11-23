@@ -69,8 +69,31 @@ def chime():
 
 
 # ------------------------------------------------------------------ timeline
+def number_lines(plan):
+    """Give every line a voice-file number (in order) unless it already has one."""
+    n = 0
+    out = []
+    for sg in plan["segments"]:
+        for ln in sg.get("lines", []):
+            if "n" not in ln:
+                if ln["who"] == "Dodo & Dini":
+                    ln["n"] = [n + 1, n + 2]; n += 2
+                    out += [(n - 1, "Dodo", ln["say"]), (n, "Dini", ln["say"])]
+                    continue
+                n += 1; ln["n"] = n
+            else:
+                n = max(n, max(ln["n"]) if isinstance(ln["n"], list) else ln["n"])
+            out.append((ln["n"], ln["who"], ln["say"]))
+    return out
+
+
+def line_list(plan):
+    return "\n".join(f"{n:02d}. {w}: {s}" for n, w, s in number_lines(plan))
+
+
 def build(plan, voices_dir):
     files = {int(os.path.basename(p)[:2]): p for p in glob.glob(os.path.join(voices_dir, "*.mp3"))}
+    number_lines(plan)
     t = 0.0
     segs, events = [], []
     track = []
@@ -153,6 +176,77 @@ def base_video(plan, segs, clips_dir, total):
 
 
 # ------------------------------------------------------------------ overlays
+def draw_shape(d, kind, cx, cy, r, col):
+    o = dict(fill=col, outline=(43, 48, 66), width=6)
+    if kind == "circle":
+        d.ellipse([cx - r, cy - r, cx + r, cy + r], **o)
+    elif kind == "square":
+        d.rectangle([cx - r * 0.85, cy - r * 0.85, cx + r * 0.85, cy + r * 0.85], **o)
+    elif kind == "rectangle":
+        d.rectangle([cx - r * 1.1, cy - r * 0.6, cx + r * 1.1, cy + r * 0.6], **o)
+    elif kind == "triangle":
+        d.polygon([(cx, cy - r), (cx + r * 1.05, cy + r * 0.8), (cx - r * 1.05, cy + r * 0.8)], **o)
+    elif kind == "star":
+        d.polygon(SP._star_pts(cx, cy + 6, r * 1.05, r * 0.45), **o)
+    elif kind == "heart":
+        d.ellipse([cx - r, cy - r * 0.7, cx, cy + r * 0.2], fill=col)
+        d.ellipse([cx, cy - r * 0.7, cx + r, cy + r * 0.2], fill=col)
+        d.polygon([(cx - r * 0.97, cy - r * 0.1), (cx + r * 0.97, cy - r * 0.1), (cx, cy + r)], fill=col)
+        d.ellipse([cx - r * 0.35, cy - r * 0.45, cx + r * 0.35, cy + r * 0.1], fill=col)
+    elif kind == "oval":
+        d.ellipse([cx - r * 1.1, cy - r * 0.7, cx + r * 1.1, cy + r * 0.7], **o)
+
+
+def make_card(cd, ask=False):
+    """Flash card: {text, col, sub, dots, shape, q}. When ask, shows cd['q'] (default '?') in place of text."""
+    S = 2
+    Wc, Hc = 250 * S, 290 * S
+    im = Image.new("RGBA", (Wc, Hc), (0, 0, 0, 0))
+    d = ImageDraw.Draw(im)
+    col = tuple(cd.get("col", (60, 130, 230)))
+    d.rounded_rectangle([6 * S, 6 * S, Wc - 6 * S, Hc - 6 * S], 34 * S, fill=(255, 255, 255, 240), outline=(255, 200, 60), width=9 * S)
+    body_top, body_bot = 20 * S, 220 * S
+    cx, cy = Wc / 2, (body_top + body_bot) / 2
+    text = cd.get("q", "?") if ask and not cd.get("dots") and not cd.get("shape") else cd.get("text", "")
+    if cd.get("shape"):
+        draw_shape(d, cd["shape"], cx, cy, 78 * S, col)
+    elif cd.get("dots"):
+        n = cd["dots"]; cols = 5 if n > 4 else n; rows = (n + cols - 1) // cols
+        r = 15 * S if n <= 10 else 11 * S
+        gap = r * 2.6
+        for i in range(n):
+            x = cx + (i % cols - (cols - 1) / 2) * gap
+            y = cy + (i // cols - (rows - 1) / 2) * gap
+            d.ellipse([x - r, y - r, x + r, y + r], fill=col, outline=(43, 48, 66), width=3 * S)
+    else:
+        parts = [text]
+        if " " in text and len(text) > 8:
+            ws = text.split(); h = (len(ws) + 1) // 2
+            parts = [" ".join(ws[:h]), " ".join(ws[h:])]
+        size = 150 if len(text) <= 2 else 110
+        while size > 20:
+            f = SP.font(size * S)
+            if max(d.textlength(pt, font=f) for pt in parts) <= 205 * S and size * S * 1.15 * len(parts) <= 190 * S:
+                break
+            size -= 4
+        lh = size * S * 1.12
+        for k, pt in enumerate(parts):
+            tw = d.textlength(pt, font=f); bb = f.getbbox(pt)
+            y = cy - lh * (len(parts) - 1) / 2 + k * lh - (bb[1] + bb[3]) / 2
+            d.text((cx - tw / 2, y), pt, font=f, fill=col, stroke_width=4 * S, stroke_fill="white")
+    sub = cd.get("sub", "")
+    if (cd.get("dots") or cd.get("shape")) and not ask:
+        sub = cd.get("text", sub)
+    if sub and not (ask and (cd.get("dots") or cd.get("shape"))) or (sub and not ask):
+        f2 = SP.font((44 if len(sub) <= 8 else 32) * S)
+        tw = d.textlength(sub, font=f2)
+        d.text((cx - tw / 2, 228 * S), sub, font=f2, fill=col if (cd.get("dots") or cd.get("shape")) else (70, 70, 90))
+    elif ask:
+        f2 = SP.font(48 * S); tw = d.textlength("?", font=f2)
+        d.text((cx - tw / 2, 226 * S), "?", font=f2, fill=(240, 150, 40))
+    return im.resize((Wc // S, Hc // S), Image.LANCZOS)
+
+
 def ease(x):
     x = max(0.0, min(1.0, x)); return x * x * (3 - 2 * x)
 
@@ -169,6 +263,13 @@ def wrap(d, text, f, maxw):
 
 
 def compose(plan, clips_dir, voices_dir, out):
+    global TMP
+    TMP = os.path.join("/tmp/dlg3d", os.path.basename(out).replace(".mp4", ""))
+    os.makedirs(TMP, exist_ok=True)
+    sj = os.path.join(clips_dir, "starts.json")
+    if os.path.exists(sj):
+        import json
+        plan["clip_start"] = dict(plan.get("clip_start", {}), **json.load(open(sj)))
     segs, events, total = build(plan, voices_dir)
     base = base_video(plan, segs, clips_dir, total)
     nfr = int(total * FPS)
@@ -177,9 +278,10 @@ def compose(plan, clips_dir, voices_dir, out):
     logo_big, logo_small = SP.logo(120, 9), SP.logo(40, 5)
     cards = {n: SP.obj(n, 170) for n in plan.get("objects", [])}
     shelf = {n: SP.obj(n, 64) for n in plan.get("objects", [])}
+    card_cache = {}
     reveal_at = {}
     for ev in events:
-        if "reveal" in ev["flags"] and ev.get("card"):
+        if "reveal" in ev["flags"] and isinstance(ev.get("card"), str):
             reveal_at.setdefault(ev["card"], ev["start"])
     dec = subprocess.Popen(["ffmpeg", "-loglevel", "error", "-i", base, "-f", "rawvideo", "-pix_fmt", "rgb24", "-"], stdout=subprocess.PIPE)
     enc = subprocess.Popen(["ffmpeg", "-loglevel", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}", "-r", str(FPS), "-i", "-",
@@ -227,19 +329,32 @@ def compose(plan, clips_dir, voices_dir, out):
                         d.ellipse([40 + k * 70, 37, 76 + k * 70, 73], outline=(160, 160, 160), width=4)
             # big colour word after reveal, for the rest of the segment
             lab = sg.get("label")
-            card = sg.get("card")
-            if lab and card in reveal_at and t >= reveal_at[card]:
-                p = ease((t - reveal_at[card]) / 0.4)
+            si = segs.index(sg)
+            rvt = next((e["start"] for e in events if e["seg"] == si and "reveal" in e["flags"]), None)
+            if lab and rvt is not None and t >= rvt:
+                p = ease((t - rvt) / 0.4)
                 fb = SP.font(int(40 + 40 * p))
                 tw = d.textlength(lab, font=fb)
-                d.text((W - 60 - tw, 130), lab, font=fb, fill=tuple(sg["labelcol"]), stroke_width=8, stroke_fill="white")
+                lx = W - 60 - tw if plan.get("objects") else 36
+                ly = 130 if plan.get("objects") else 22
+                d.text((lx, ly), lab, font=fb, fill=tuple(sg["labelcol"]), stroke_width=8, stroke_fill="white")
                 if p < 1:
                     for k in range(10):
                         a = math.radians(k * 36 + t * 220); r = 90 + 60 * p
-                        x, y = W - 60 - tw / 2 + r * math.cos(a), 175 + r * 0.6 * math.sin(a)
+                        x, y = lx + tw / 2 + r * math.cos(a), ly + 45 + r * 0.6 * math.sin(a)
                         d.polygon(SP._star_pts(x, y, 14, 6), fill=(255, 230, 80))
             # flash cards in the colour game
-            if kind == "game" and ev and ev.get("card") and ev["seg"] == segs.index(sg):
+            if ev and isinstance(ev.get("card"), dict) and t < ev["end"] + ev["_pause"] + 0.2:
+                cd = ev["card"]
+                key = repr(sorted(cd.items())) + ("Q" if "ask" in ev["flags"] else "")
+                if key not in card_cache:
+                    card_cache[key] = make_card(cd, ask="ask" in ev["flags"])
+                cim = card_cache[key]
+                p = ease((t - ev["start"]) / 0.35)
+                if p < 1:
+                    cim = cim.resize((max(1, int(cim.width * (0.6 + 0.4 * p))), max(1, int(cim.height * (0.6 + 0.4 * p)))))
+                img.alpha_composite(cim, (int(W - 160 - cim.width / 2), int(230 - cim.height / 2 + 6 * math.sin(t * 3))))
+            if kind == "game" and ev and isinstance(ev.get("card"), str) and ev["seg"] == segs.index(sg):
                 n = ev["card"]
                 show = cards[n]
                 rv = ev["start"] if "gamereveal" in ev["flags"] else 1e9
