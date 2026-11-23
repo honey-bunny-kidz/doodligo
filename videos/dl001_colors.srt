@@ -1,0 +1,212 @@
+1
+00:00:05,000 --> 00:00:08,139
+Dodo: Hi, little explorers! I'm Dodo!
+
+2
+00:00:08,289 --> 00:00:10,863
+Dini: And I'm Dini! Dino-hello!
+
+3
+00:00:11,013 --> 00:00:15,543
+Dodo: Welcome to the rainbow garden. But oh no! Everything is grey!
+
+4
+00:00:15,693 --> 00:00:17,659
+Dini: Where did all the colors go?
+
+5
+00:00:17,809 --> 00:00:21,999
+Dodo: Let's find six colorful things and bring the colors back!
+
+6
+00:00:23,349 --> 00:00:25,470
+Dini: Look! A blue apple!
+
+7
+00:00:25,620 --> 00:00:28,746
+Dodo: Not quite, Dini. This apple is red!
+
+8
+00:00:28,896 --> 00:00:31,005
+Dodo: Red! Can you say red?
+
+9
+00:00:33,105 --> 00:00:35,786
+Dini: Red! Red like a yummy apple!
+
+10
+00:00:35,936 --> 00:00:38,927
+Dodo: Can you find something red near you?
+
+11
+00:00:42,627 --> 00:00:44,849
+Dodo: What is floating up there?
+
+12
+00:00:44,999 --> 00:00:47,242
+Dini: A balloon! Is it yellow?
+
+13
+00:00:47,392 --> 00:00:50,545
+Dodo: No, silly! What color is the balloon?
+
+14
+00:00:52,645 --> 00:00:55,340
+Dodo: It's blue! Blue like the sky!
+
+15
+00:00:55,490 --> 00:00:57,531
+Dini: Blue! Dino-wow!
+
+16
+00:00:58,881 --> 00:01:02,008
+Dini: Something is shining! Ooh, a green star!
+
+17
+00:01:02,158 --> 00:01:05,249
+Dodo: Try again, Dini. The star is yellow!
+
+18
+00:01:05,399 --> 00:01:07,461
+Dodo: Can you say yellow?
+
+19
+00:01:09,561 --> 00:01:12,316
+Dini: Yellow! Yellow like the sunshine!
+
+20
+00:01:13,666 --> 00:01:15,480
+Dodo: Look, a little leaf!
+
+21
+00:01:15,630 --> 00:01:17,154
+Dini: Is it purple?
+
+22
+00:01:17,304 --> 00:01:20,438
+Dodo: No, it's green! Just like you, Dini!
+
+23
+00:01:20,588 --> 00:01:22,994
+Dini: Green like me! Hooray!
+
+24
+00:01:23,144 --> 00:01:25,580
+Dodo: Which thing is green? The leaf!
+
+25
+00:01:28,080 --> 00:01:30,977
+Dini: Mmm, a round fruit! Is it red?
+
+26
+00:01:31,127 --> 00:01:35,159
+Dodo: Close! This is an orange, and its color is orange too!
+
+27
+00:01:35,309 --> 00:01:36,828
+Dodo: Say orange!
+
+28
+00:01:38,928 --> 00:01:41,707
+Dini: Orange! Like your sneakers, Dodo!
+
+29
+00:01:43,057 --> 00:01:45,487
+Dodo: One more color to find!
+
+30
+00:01:45,637 --> 00:01:48,328
+Dini: A pretty flower! Is it blue?
+
+31
+00:01:48,478 --> 00:01:51,423
+Dodo: Almost! This flower is purple!
+
+32
+00:01:51,573 --> 00:01:53,794
+Dodo: Can you say purple?
+
+33
+00:01:55,894 --> 00:01:58,348
+Dini: Purple! I love purple!
+
+34
+00:01:59,698 --> 00:02:03,052
+Dodo: We found all six colors! Look at the garden!
+
+35
+00:02:03,202 --> 00:02:05,821
+Dini: The rainbow is back! Hooray!
+
+36
+00:02:07,171 --> 00:02:11,438
+Dodo: Let's play a color game! I show a thing, you shout the color!
+
+37
+00:02:11,588 --> 00:02:13,455
+Dodo: What color is this?
+
+38
+00:02:15,355 --> 00:02:16,350
+Dini: Blue!
+
+39
+00:02:16,650 --> 00:02:18,518
+Dodo: What color is this?
+
+40
+00:02:20,418 --> 00:02:21,444
+Dini: Red!
+
+41
+00:02:21,744 --> 00:02:23,612
+Dodo: What color is this?
+
+42
+00:02:25,512 --> 00:02:26,580
+Dini: Green!
+
+43
+00:02:26,880 --> 00:02:28,747
+Dodo: What color is this?
+
+44
+00:02:30,647 --> 00:02:31,826
+Dini: Purple!
+
+45
+00:02:32,126 --> 00:02:33,994
+Dodo: What color is this?
+
+46
+00:02:35,894 --> 00:02:36,946
+Dini: Yellow!
+
+47
+00:02:37,246 --> 00:02:39,113
+Dodo: What color is this?
+
+48
+00:02:41,013 --> 00:02:41,985
+Dini: Orange!
+
+49
+00:02:43,485 --> 00:02:46,404
+Dodo: Can you remember all six colors?
+
+50
+00:02:48,704 --> 00:02:52,334
+Dodo: Wow! We learned six beautiful colors today!
+
+51
+00:02:52,484 --> 00:02:56,186
+Dini: Red, blue, yellow, green, orange and purple! Dino-wow!
+
+52
+00:02:56,336 --> 00:02:59,724
+Dodo: Share this video with a friend who loves colors!
+
+53
+00:02:59,874 --> 00:03:02,975
+Dodo & Dini: See you next time, little explorers!
+
